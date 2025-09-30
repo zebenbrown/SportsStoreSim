@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -6,30 +7,21 @@ using UnityEngine.AI;
 public class Customer : MonoBehaviour
 {
     private float cash = 100;
-    public TextMeshProUGUI cashText;
+    //public TextMeshProUGUI cashText;
     private NavMeshAgent agent;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.destination = GameManager.instance.getBatShelfPosition();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (gameObject.transform.position == GameManager.instance.getBatShelfPosition())
-        {
-            StartCoroutine(shopBehaviour());
-        }
+        StartCoroutine(InitalizeCustomer());
     }
 
     //later will take a product as a parameter instead
     public void purchaseItem(float amount)
     {
         cash -= amount;
-        cashText.text = "Cash: " + cash.ToString("f2");
+        //cashText.text = "Cash: " + cash.ToString("f2");
     }
     
     IEnumerator shopBehaviour()
@@ -50,5 +42,29 @@ public class Customer : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
+    }
+
+    IEnumerator InitalizeCustomer()
+    {
+        yield return new WaitForSeconds(1f);
+
+        if (agent.isOnNavMesh)
+        {
+            agent.SetDestination(GameManager.instance.getBatShelfPosition());
+        }
+        else
+        {
+            Debug.Log("Agent not on navmesh");
+        }
+    }
+
+    public void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Shelf"))
+        {
+            Debug.Log("OnCollisionEnter");
+            GameManager.instance.sellBat();
+            Destroy(gameObject);
+        }
     }
 }

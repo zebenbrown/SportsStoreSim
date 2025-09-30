@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public Button sellCleatsButton;
     private Customer[]  customers;
     [SerializeField] private GameObject batShelf;
+    private CustomerSpawner customerSpawner;
     
 
     public static GameManager instance
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
         sellBatButton.onClick.AddListener(sellBat);
         buyCleatsButton.onClick.AddListener(buyCleats);
         sellCleatsButton.onClick.AddListener(sellCleats);
-        customers = GetComponentsInChildren<Customer>();
+        
     }
 
     // Update is called once per frame
