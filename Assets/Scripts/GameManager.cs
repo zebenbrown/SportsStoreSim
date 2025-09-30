@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public Button sellBatButton;
     public Button buyCleatsButton;
     public Button sellCleatsButton;
+    private Customer[]  customers;
+    [SerializeField] private GameObject batShelf;
     
 
     public static GameManager instance
@@ -49,8 +51,7 @@ public class GameManager : MonoBehaviour
         sellBatButton.onClick.AddListener(sellBat);
         buyCleatsButton.onClick.AddListener(buyCleats);
         sellCleatsButton.onClick.AddListener(sellCleats);
-
-        StartCoroutine(spawnCustomer());
+        customers = GetComponentsInChildren<Customer>();
     }
 
     // Update is called once per frame
@@ -106,26 +107,31 @@ public class GameManager : MonoBehaviour
         inventoryCleatsText.text = "Cleats: " + cleatInventoryCount;
     }
 
-    IEnumerator spawnCustomer()
+    // IEnumerator spawnCustomer()
+    // {
+    //     while (true)
+    //     {
+    //         Debug.Log("Spawning customer");
+    //         yield return new WaitForSeconds(5f);
+    //
+    //         int productChoice = Random.Range(1, 3);
+    //         if (productChoice == 1)
+    //         {
+    //             sellBat();
+    //         }
+    //
+    //         if (productChoice == 2)
+    //         {
+    //             sellCleats();
+    //         }
+    //
+    //         Debug.Log("Customer Leaving");
+    //         customerCount++;
+    //     }
+    // }
+
+    public Vector3 getBatShelfPosition()
     {
-        while (true)
-        {
-            Debug.Log("Spawning customer");
-            yield return new WaitForSeconds(5f);
-
-            int productChoice = Random.Range(1, 3);
-            if (productChoice == 1)
-            {
-                sellBat();
-            }
-
-            if (productChoice == 2)
-            {
-                sellCleats();
-            }
-
-            Debug.Log("Customer Leaving");
-            customerCount++;
-        }
+        return batShelf.transform.position;
     }
 }
