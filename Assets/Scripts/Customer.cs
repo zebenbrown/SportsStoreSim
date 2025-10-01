@@ -11,6 +11,7 @@ public class Customer : MonoBehaviour
     //public TextMeshProUGUI cashText;
     private NavMeshAgent agent;
     private int shelfChoice;
+    bool itemPurchased = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,7 +19,6 @@ public class Customer : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         StartCoroutine(InitalizeCustomer());
         shelfChoice = Random.Range(0, 2);
-
     }
 
     private void Update()
@@ -40,7 +40,6 @@ public class Customer : MonoBehaviour
     public void purchaseItem(float amount)
     {
         cash -= amount;
-        //cashText.text = "Cash: " + cash.ToString("f2");
     }
     
     IEnumerator shopBehaviour()
@@ -50,13 +49,17 @@ public class Customer : MonoBehaviour
             case 0:
                 GameManager.instance.sellBat();
                 purchaseItem(50f);
+                itemPurchased =  true;
                 Destroy(gameObject);
+                itemPurchased  = false;
                 break;
             
             case 1:
                 GameManager.instance.sellCleats();
                 purchaseItem(100f);
+                itemPurchased =  true;
                 Destroy(gameObject);
+                itemPurchased =  false;
                 break;
         }
         
@@ -66,39 +69,62 @@ public class Customer : MonoBehaviour
     IEnumerator InitalizeCustomer()
     {
         yield return new WaitForSeconds(1f);
-        
 
-        switch (shelfChoice)
+
+        //if both items have inventory then randomly pick a product
+        if (GameManager.instance.getCleatInventory() > 0 && GameManager.instance.getBatInventory() > 0)
         {
-            case 0:
-                if (agent.isOnNavMesh)
-                {
-                    agent.SetDestination(GameManager.instance.getBatShelfPosition());
-                }
-                else
-                {
-                    Debug.Log("Agent not on navmesh");
-                }
-                break;
+            switch (shelfChoice)
+            {
+                case 0:
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.SetDestination(GameManager.instance.getBatShelfPosition());
+                    }
+                    else
+                    {
+                        Debug.Log("Agent not on navmesh");
+                    }
+                    break;
             
-            case 1:
-                if (agent.isOnNavMesh)
-                {
-                    agent.SetDestination(GameManager.instance.getCleatShelfPosition());
-                }
-                else
-                {
-                    Debug.Log("Agent not on navmesh");
-                }
-                break;
+                case 1:
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.SetDestination(GameManager.instance.getCleatShelfPosition());
+                    }
+                    else
+                    {
+                        Debug.Log("Agent not on navmesh");
+                    }
+                    break;
+            }   
+        }
+        
+        //if cleats have inventory set destination to that shelf
+        else if (GameManager.instance.getCleatInventory() > 0)
+        {
+            agent.SetDestination(GameManager.instance.getCleatShelfPosition());
+        }
+        
+        //if bats have inventory set destination to that shelf
+        else if (GameManager.instance.getBatInventory() > 0)
+        {
+            agent.SetDestination(GameManager.instance.getBatShelfPosition());
         }
     }
 
     public void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Shelf"))
+        //if other has no parent then return
+        if (other.transform.parent == null)
         {
-            Debug.Log("OnCollisionEnter");
+            return;
+        }
+        
+        //if other is a shelf
+        if (!other.transform.parent.CompareTag("Shelf")) return;
+        if (!itemPurchased)
+        {
             StartCoroutine(shopBehaviour());
         }
     }

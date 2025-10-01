@@ -11,13 +11,8 @@ public class GameManager : MonoBehaviour
     private float batPrice = 29.99f;
     private float cleatPrice = 49.99f;
     //UI Start
-    public TextMeshProUGUI cashText;
-    public TextMeshProUGUI inventoryBatText;
-    public TextMeshProUGUI inventoryCleatsText;
     public Button buyBatButton;
-    public Button sellBatButton;
     public Button buyCleatsButton;
-    public Button sellCleatsButton;
     //UI End
     [SerializeField] private GameObject batShelf;
     [SerializeField] private GameObject cleatShelf;
@@ -49,9 +44,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         buyBatButton.onClick.AddListener(buyBat);
-        sellBatButton.onClick.AddListener(sellBat);
         buyCleatsButton.onClick.AddListener(buyCleats);
-        sellCleatsButton.onClick.AddListener(sellCleats);
     }
 
     public float getCash()
@@ -62,7 +55,6 @@ public class GameManager : MonoBehaviour
     public void SpendCash(float amount)
     {
         cash -= amount;
-        cashText.text = "Cash: " + cash.ToString("f2");
     }
 
     public void buyBat()

@@ -11,9 +11,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI inventoryBatText;
     public TextMeshProUGUI inventoryCleatsText;
     public Button buyBatButton;
-    public Button sellBatButton;
     public Button buyCleatsButton;
-    public Button sellCleatsButton;
     [SerializeField] private GameObject canvas;
     private bool canvasStatus = false;
     
