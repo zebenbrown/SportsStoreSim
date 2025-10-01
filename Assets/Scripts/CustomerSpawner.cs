@@ -6,8 +6,10 @@ public class CustomerSpawner : MonoBehaviour
     public GameObject customer;
     public Vector3 spawnPosition;
 
-    private float spawnInterval = 8f;
+    private float spawnInterval = 1f;
+
     private int customerCount = 0;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -18,15 +20,13 @@ public class CustomerSpawner : MonoBehaviour
     {
         while (true)
         {
-            if (customerCount == 0)
-            {
-                spawnInterval = 1f;
-            }
-
-            spawnInterval = 5f;
             yield return new WaitForSeconds(spawnInterval);
-            Instantiate(customer, spawnPosition, Quaternion.identity);
-            customerCount++;
+            if (GameManager.instance.getBatInventory() > 0 || GameManager.instance.getCleatInventory() > 0)
+            {
+                spawnInterval = 5f;
+                Instantiate(customer, spawnPosition, Quaternion.identity);
+                customerCount++;
+            }
         }
     }
 }

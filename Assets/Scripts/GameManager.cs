@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     private float cash = 1000;
-    private int baseballBatInventoryCount = 0;
-    private int cleatInventoryCount = 0;
+    private int baseballBatInventoryCount = 5;
+    private int cleatInventoryCount = 5;
     private float batPrice = 29.99f;
     private float cleatPrice = 49.99f;
-    private int customerCount = 0;
+    //private int customerCount = 0;
     public TextMeshProUGUI cashText;
     public TextMeshProUGUI inventoryBatText;
     public TextMeshProUGUI inventoryCleatsText;
@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public Button sellCleatsButton;
     private Customer[]  customers;
     [SerializeField] private GameObject batShelf;
+    [SerializeField] private GameObject cleatShelf;
     private CustomerSpawner customerSpawner;
     
 
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
         sellBatButton.onClick.AddListener(sellBat);
         buyCleatsButton.onClick.AddListener(buyCleats);
         sellCleatsButton.onClick.AddListener(sellCleats);
+        updateUI();
         
     }
     
@@ -102,31 +104,23 @@ public class GameManager : MonoBehaviour
         inventoryCleatsText.text = "Cleats: " + cleatInventoryCount;
     }
 
-    // IEnumerator spawnCustomer()
-    // {
-    //     while (true)
-    //     {
-    //         Debug.Log("Spawning customer");
-    //         yield return new WaitForSeconds(5f);
-    //
-    //         int productChoice = Random.Range(1, 3);
-    //         if (productChoice == 1)
-    //         {
-    //             sellBat();
-    //         }
-    //
-    //         if (productChoice == 2)
-    //         {
-    //             sellCleats();
-    //         }
-    //
-    //         Debug.Log("Customer Leaving");
-    //         customerCount++;
-    //     }
-    // }
-
     public Vector3 getBatShelfPosition()
     {
         return batShelf.transform.position;
+    }
+
+    public Vector3 getCleatShelfPosition()
+    {
+        return cleatShelf.transform.position;
+    }
+
+    public int getBatInventory()
+    {
+        return baseballBatInventoryCount;
+    }
+
+    public int getCleatInventory()
+    {
+        return cleatInventoryCount;
     }
 }

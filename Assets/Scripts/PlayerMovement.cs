@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform cameraTransform;
     private float verticalLook;
 
-    private float speed = 20f;
+    private float speed = 50f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
