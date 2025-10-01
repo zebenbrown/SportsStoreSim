@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody rb;
     private Collider capsuleCollider;
-    private PlayerMovementInput input;
+    private GameInput input;
     private Vector2 movement;
     private Vector2 look;
     public float mouseSensitivity;
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
-        input = new PlayerMovementInput();
+        input = new GameInput();
         rb = GetComponent<Rigidbody>();
         capsuleCollider = GetComponent<Collider>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,23 +37,25 @@ public class PlayerMovement : MonoBehaviour
     {
         input.Player.Disable();
     }
-
     private void Update()
     {
-        movement = input.Player.Move.ReadValue<Vector2>();
-        look = input.Player.Look.ReadValue<Vector2>();
+        if (!UIManager.instance.getCanvasStatus())
+        {
+            movement = input.Player.Move.ReadValue<Vector2>();
+            look = input.Player.Look.ReadValue<Vector2>();
 
-        mouseX = look.x * (mouseSensitivity);
-        mouseY = look.y * (mouseSensitivity);
+            mouseX = look.x * (mouseSensitivity);
+            mouseY = look.y * (mouseSensitivity);
         
-        transform.Rotate(Vector3.up * mouseX);
+            transform.Rotate(Vector3.up * mouseX);
         
-        verticalLook -= mouseY;
-        verticalLook = Mathf.Clamp(verticalLook, -90f, 90f);
+            verticalLook -= mouseY;
+            verticalLook = Mathf.Clamp(verticalLook, -90f, 90f);
         
-        cameraTransform.localRotation = Quaternion.Euler(verticalLook, 0, 0);
+            cameraTransform.localRotation = Quaternion.Euler(verticalLook, 0, 0);
         
-        Vector3 move = transform.right * movement.x + transform.forward * movement.y;
-        rb.MovePosition(rb.position + move * speed * Time.deltaTime);
+            Vector3 move = transform.right * movement.x + transform.forward * movement.y;
+            rb.MovePosition(rb.position + move * speed * Time.deltaTime);
+        }
     }
 }

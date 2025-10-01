@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     private int cleatInventoryCount = 5;
     private float batPrice = 29.99f;
     private float cleatPrice = 49.99f;
-    //private int customerCount = 0;
+    //UI Start
     public TextMeshProUGUI cashText;
     public TextMeshProUGUI inventoryBatText;
     public TextMeshProUGUI inventoryCleatsText;
@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public Button sellBatButton;
     public Button buyCleatsButton;
     public Button sellCleatsButton;
-    private Customer[]  customers;
+    //UI End
     [SerializeField] private GameObject batShelf;
     [SerializeField] private GameObject cleatShelf;
     private CustomerSpawner customerSpawner;
@@ -48,13 +48,15 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        cashText.text = "Cash: " + cash.ToString("f2");
         buyBatButton.onClick.AddListener(buyBat);
         sellBatButton.onClick.AddListener(sellBat);
         buyCleatsButton.onClick.AddListener(buyCleats);
         sellCleatsButton.onClick.AddListener(sellCleats);
-        updateUI();
-        
+    }
+
+    public float getCash()
+    {
+        return cash;
     }
     
     public void SpendCash(float amount)
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour
     {
         baseballBatInventoryCount++;
         SpendCash(batPrice);
-        updateUI();
+        UIManager.instance.updateUI();
     }
 
     public void sellBat()
@@ -76,7 +78,7 @@ public class GameManager : MonoBehaviour
         {
             baseballBatInventoryCount--;
             cash += 50;
-            updateUI();
+            UIManager.instance.updateUI();
         }
     }
 
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         cleatInventoryCount++;
         SpendCash(cleatPrice);
-        updateUI();
+        UIManager.instance.updateUI();
     }
 
     public void sellCleats()
@@ -93,15 +95,8 @@ public class GameManager : MonoBehaviour
         {
             cleatInventoryCount--;
             cash += 100;
-            updateUI();
+            UIManager.instance.updateUI();
         }
-    }
-
-    void updateUI()
-    {
-        cashText.text = "Cash: " + cash.ToString("f2");
-        inventoryBatText.text = "Baseball Bat(s): " + baseballBatInventoryCount;
-        inventoryCleatsText.text = "Cleats: " + cleatInventoryCount;
     }
 
     public Vector3 getBatShelfPosition()
