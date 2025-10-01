@@ -22,11 +22,11 @@ public class CustomerSpawner : MonoBehaviour
             {
                 spawnInterval = 1f;
             }
-            
+
+            spawnInterval = 5f;
             yield return new WaitForSeconds(spawnInterval);
             Instantiate(customer, spawnPosition, Quaternion.identity);
             customerCount++;
         }
-        yield return null;
     }
 }

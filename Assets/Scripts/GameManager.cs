@@ -54,13 +54,7 @@ public class GameManager : MonoBehaviour
         sellCleatsButton.onClick.AddListener(sellCleats);
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void SpendCash(float amount)
     {
         cash -= amount;
